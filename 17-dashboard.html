@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Better — 15 Dashboard</title>
+<style>
+:root{
+  --sf:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',sans-serif;
+  --roboto:'Roboto Flex','Roboto',system-ui,sans-serif;
+  --serif:'Newsreader','Georgia',serif;
+  --brand:#E8663D; --brand-deep:#C7416B; --brand-soft:#FDE3D6;
+  --accent:#F2A65A; --warning:#E0894A;
+  --bg:#FFF3EC; --surface:#FFFFFF; --surface-2:#FCE6DA;
+  --ink:#3A2230; --ink-2:#8A6A6E; --hair:#F3D6C8;
+  --shadow-tint:rgba(199,65,107,.4);
+  --studio-bg:#F6E7DD; --studio-ink:#5a3340;
+  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-hig:cubic-bezier(0.32,0.72,0,1);
+  --dur-s:.28s; --dur-m:.5s; --dur-l:.9s; --dur-theme:.7s;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;
+  --radius-l:28px;--radius-m:20px;--radius-s:14px;--radius-pill:999px;
+}
+body.dark{
+  --brand:#E89160; --brand-deep:#C25E3F; --brand-soft:#2A1F1B;
+  --accent:#F2A65A; --warning:#D89060;
+  --bg:#0E1F1B; --surface:#16322B; --surface-2:#1D403A;
+  --ink:#DCE6E2; --ink-2:#7E9389; --hair:#243D36;
+  --shadow-tint:rgba(232,145,96,.4);
+  --studio-bg:#0A1714; --studio-ink:#a8c5bd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sf);background:var(--studio-bg);color:var(--studio-ink);
+  transition:background var(--dur-theme) ease,color var(--dur-theme) ease;min-height:100vh;padding:var(--space-6) var(--space-5) var(--space-7)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.studio-head{max-width:980px;margin:0 auto var(--space-6);display:flex;align-items:center;gap:var(--space-5);flex-wrap:wrap}
+.brand-block{display:flex;align-items:center;gap:var(--space-3)}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(160deg,var(--brand),var(--brand-deep));display:grid;place-items:center;box-shadow:0 6px 16px var(--shadow-tint)}
+.brand-mark svg{width:22px;height:22px}
+.brand-name{font-weight:680;font-size:19px;letter-spacing:-.02em}
+.brand-sub{font-size:12.5px;opacity:.6;margin-top:1px}
+.spacer{flex:1}
+.toggle-group{display:flex;gap:var(--space-1);background:rgba(127,127,127,.14);padding:4px;border-radius:var(--radius-pill)}
+.seg{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:560;padding:7px 12px;border-radius:var(--radius-pill);cursor:pointer;opacity:.62;transition:all var(--dur-s) var(--ease-hig)}
+.seg.on{background:var(--brand);color:#fff;opacity:1;box-shadow:0 3px 10px var(--shadow-tint)}
+.theme-btn{border:0;cursor:pointer;width:42px;height:42px;border-radius:var(--radius-pill);background:rgba(127,127,127,.14);color:inherit;display:grid;place-items:center;transition:transform var(--dur-s) var(--ease-spring)}
+.theme-btn:active{transform:scale(.9) rotate(-20deg)}
+.theme-btn svg{width:20px;height:20px}
+
+.stage{max-width:980px;margin:0 auto;display:flex;gap:var(--space-7);justify-content:center;flex-wrap:wrap}
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:var(--space-3)}
+.os-label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.5}
+.phone{width:340px;height:720px;border-radius:46px;position:relative;overflow:hidden;background:var(--bg);
+  transition:background var(--dur-theme) ease;box-shadow:0 0 0 11px #1a1a1c,0 0 0 13px #2c2c2e,0 36px 70px -20px rgba(20,20,40,.55)}
+.status{position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:14px;font-weight:600;color:var(--ink);z-index:30}
+.status .r{display:flex;gap:6px;align-items:center}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:108px;height:30px;background:#000;border-radius:18px;z-index:31}
+.screen{position:absolute;inset:0;padding-top:50px;display:flex;flex-direction:column;overflow:hidden}
+
+/* atmosphere subtle */
+.atmos{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.haze{position:absolute;border-radius:50%;filter:blur(70px);opacity:.32}
+.haze.a{width:300px;height:300px;background:var(--brand);top:-100px;right:-80px}
+.haze.b{width:240px;height:240px;background:var(--accent);bottom:80px;left:-100px;opacity:.22}
+
+/* header personal */
+.header{position:relative;z-index:5;padding:var(--space-4) var(--space-5) var(--space-3);display:flex;align-items:center;gap:var(--space-3)}
+.greet{flex:1}
+.greet-label{font-size:13px;color:var(--ink-2);font-weight:560;margin-bottom:2px}
+.greet-name{font-family:var(--serif);font-size:24px;font-weight:600;letter-spacing:-.02em;color:var(--ink);line-height:1}
+.greet-name em{font-style:italic;color:var(--brand)}
+.greet-date{font-size:11.5px;color:var(--ink-2);margin-top:4px;letter-spacing:.04em}
+.avatar{position:relative;width:42px;height:42px;border-radius:50%;background:linear-gradient(160deg,var(--brand),var(--brand-deep));display:grid;place-items:center;color:#fff;font-weight:680;font-size:16px;cursor:pointer;border:0;font-family:inherit;transition:transform var(--dur-s) var(--ease-spring),box-shadow var(--dur-s);box-shadow:0 4px 12px var(--shadow-tint)}
+.avatar:hover{transform:scale(1.06);box-shadow:0 6px 18px var(--shadow-tint)}
+.avatar:active{transform:scale(.92)}
+.avatar:after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--brand);opacity:0;transition:opacity var(--dur-s)}
+.avatar:hover:after,.avatar:focus-visible:after{opacity:.5}
+
+/* content scrollable */
+.content{position:relative;z-index:5;flex:1;overflow-y:auto;scrollbar-width:none;padding:0 var(--space-5) 90px}
+.content::-webkit-scrollbar{display:none}
+
+/* COFRE-HERO: porquinho dourado idêntico ao 21-home */
+.cofre-hero{position:relative;padding:18px 16px 16px;margin-bottom:var(--space-3);text-align:center;overflow:hidden;
+  background:linear-gradient(165deg,var(--surface) 0%,var(--surface-2) 58%,rgba(232,180,90,.13) 100%);
+  box-shadow:0 18px 44px -24px rgba(194,144,46,.4)}
+.corner-glow{position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:280px;height:210px;background:radial-gradient(circle,rgba(232,180,90,.36),transparent 66%);filter:blur(14px);pointer-events:none}
+
+/* cofre gold palette */
+:root{--cofre-gold:#E8B45A;--cofre-gold-light:#F4D49A;--cofre-gold-deep:#C2902E}
+body.dark{--cofre-gold:#F0C476;--cofre-gold-light:#F7E0AE;--cofre-gold-deep:#E8B45A}
+
+.cofre-stage{position:relative;width:236px;height:198px;margin:0 auto;display:flex;align-items:center;justify-content:center}
+.cofre-halo{position:absolute;top:48%;left:50%;width:230px;height:230px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(232,180,90,.3) 0%,rgba(232,180,90,.07) 50%,transparent 72%);animation:haloGold 5.5s ease-in-out infinite;z-index:0}
+@keyframes haloGold{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.95)}50%{opacity:.95;transform:translate(-50%,-50%) scale(1.05)}}
+.cofre-svg{position:relative;z-index:1;width:228px;height:auto;overflow:visible}
+
+/* living layers */
+.pig{transform-box:view-box;transform-origin:118px 132px;animation:pigBreath 5.5s ease-in-out infinite}
+@keyframes pigBreath{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.018) translateY(-2px)}}
+.pig-ear{transform-box:fill-box;transform-origin:bottom center;animation:earTwitch 7s ease-in-out infinite}
+@keyframes earTwitch{0%,86%,100%{transform:rotate(0)}90%{transform:rotate(-8deg)}94%{transform:rotate(3deg)}}
+.pig-eye{transform-box:fill-box;transform-origin:center;animation:blink 5.2s ease-in-out infinite}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+
+/* ouro líquido — ondas */
+.liquid{transition:transform .6s var(--ease-spring)}
+.wave{animation:waveMove 7s linear infinite}
+.wave.w2{animation-duration:11.2s;animation-direction:reverse;opacity:.55}
+@keyframes waveMove{from{transform:translateX(0)}to{transform:translateX(-160px)}}
+
+/* moeda caindo na fenda */
+.dropcoin{transform-box:view-box;transform-origin:center;opacity:0;animation:coinDrop 4.2s cubic-bezier(.5,0,.85,.5) infinite}
+@keyframes coinDrop{0%{opacity:0;transform:translate(0,-46px) rotate(-12deg) scaleX(.7)}10%{opacity:1}46%{opacity:1;transform:translate(0,-2px) rotate(6deg) scaleX(1)}54%{transform:translate(0,-7px) rotate(8deg) scaleX(1)}70%{opacity:0;transform:translate(0,4px) rotate(10deg) scaleX(1)}100%{opacity:0;transform:translate(0,4px) rotate(10deg) scaleX(1)}}
+.pig.thump{animation:pigBreath 5.5s ease-in-out infinite,pigThump 4.2s ease-in-out infinite}
+@keyframes pigThump{0%,44%{transform:scaleY(1)}50%{transform:scaleY(.97) translateY(2px)}58%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+
+/* motes douradas (partículas de ouro) */
+.cmote{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--cofre-gold-light);box-shadow:0 0 8px var(--cofre-gold);opacity:0;z-index:2}
+.cmote.m1{left:56px;bottom:60px;animation:moteUp 6s ease-in-out 0s infinite}
+.cmote.m2{left:182px;bottom:68px;animation:moteUp 6s ease-in-out 1.7s infinite;width:5px;height:5px}
+.cmote.m3{left:120px;bottom:52px;animation:moteUp 6s ease-in-out 3.2s infinite;width:4px;height:4px}
+@keyframes moteUp{0%{transform:translateY(6px) scale(.5);opacity:0}25%{opacity:.85}80%{opacity:.4}100%{transform:translateY(-70px) scale(1);opacity:0}}
+
+.cofre-eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cofre-gold-deep);margin-bottom:8px;position:relative;z-index:1}
+.cofre-amount-big{font-family:var(--serif);font-style:normal;font-size:38px;font-weight:600;color:var(--ink);line-height:1;letter-spacing:-.03em;margin-bottom:12px;white-space:nowrap;position:relative;z-index:1}
+.cofre-amount-big .prefix{font-size:20px;font-weight:500;margin-right:2px;color:var(--ink);opacity:.85}
+
+.cofre-days-chip{display:inline-flex;align-items:center;gap:7px;background:var(--brand-soft);color:var(--brand-deep);font-size:12px;font-weight:680;letter-spacing:.01em;padding:6px 14px;border-radius:var(--radius-pill);margin-bottom:14px;position:relative;z-index:1}
+.cofre-days-chip .dot-live{width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 0 var(--brand);animation:pulseDot 2.2s infinite}
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(232,102,61,.7)}70%{box-shadow:0 0 0 8px rgba(232,102,61,0)}100%{box-shadow:0 0 0 0 rgba(232,102,61,0)}}
+
+.cofre-stats{display:flex;gap:6px;padding-top:12px;border-top:1px solid var(--hair);position:relative;z-index:1}
+.cofre-stat{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cofre-stat + .cofre-stat{border-left:1px solid var(--hair);padding-left:4px}
+.cs-val{font-size:12.5px;font-weight:680;color:var(--ink);letter-spacing:-.01em}
+.cs-val-serif{font-family:var(--serif);font-style:italic;font-weight:600;font-size:14px;color:var(--cofre-gold-deep)}
+.cs-lbl{font-size:9.5px;color:var(--ink-2);font-weight:500;letter-spacing:.02em}
+
+/* SOS: floating action button — fixo na tela, não rola com o conteúdo */
+.sos-fab{position:absolute;right:18px;bottom:88px;z-index:20;
+  width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;
+  background:linear-gradient(165deg,var(--brand-deep),#9c2f4f);
+  color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  box-shadow:0 10px 28px -6px rgba(199,65,107,.55),inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform var(--dur-s) var(--ease-spring);
+  opacity:0;animation:fabIn .6s var(--ease-spring) 1.4s forwards}
+.sos-fab:active{transform:scale(.92)}
+.sos-fab svg{width:19px;height:19px;stroke:#fff;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sos-fab-label{font-size:8.5px;font-weight:800;letter-spacing:.05em}
+.sos-fab-pulse{position:absolute;inset:0;border-radius:50%;background:var(--brand-deep);opacity:.5;animation:fabPulse 2.6s ease-out infinite}
+@keyframes fabPulse{0%{transform:scale(1);opacity:.5}80%,100%{transform:scale(1.55);opacity:0}}
+@keyframes fabIn{from{opacity:0;transform:scale(.4) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+/* quote motivacional */
+.quote{font-family:var(--serif);font-style:italic;font-size:15px;line-height:1.45;color:var(--ink-2);text-align:center;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4);position:relative}
+.quote:before,.quote:after{font-size:22px;color:var(--brand);opacity:.5;font-family:var(--serif)}
+.quote:before{content:'“';margin-right:2px}
+.quote:after{content:'”';margin-left:2px}
+
+/* row de cards 2x */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:var(--space-4)}
+.tile{background:var(--surface);border:1.5px solid var(--hair);padding:14px;display:flex;flex-direction:column;gap:6px}
+.tile-ico{width:30px;height:30px;border-radius:9px;background:var(--brand-soft);display:grid;place-items:center;margin-bottom:2px}
+.tile-ico svg{width:16px;height:16px;stroke:var(--brand);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tile-label{font-size:10.5px;font-weight:680;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.tile-big{font-family:var(--serif);font-style:italic;font-size:22px;font-weight:500;color:var(--ink);line-height:1.05;letter-spacing:-.02em}
+.tile-big .prefix{font-size:13px;opacity:.7;font-style:normal;font-weight:500}
+.tile-meta{font-size:11px;color:var(--ink-2);font-weight:500}
+
+/* humor card - tem chips */
+.tile.mood{padding-bottom:14px}
+.mood-chips{display:flex;gap:6px;margin-top:6px}
+.mood-chip{flex:1;aspect-ratio:1;border:1.5px solid var(--hair);background:transparent;display:grid;place-items:center;cursor:pointer;
+  border-radius:10px;font-size:18px;line-height:1;padding:0;transition:all var(--dur-s) var(--ease-spring)}
+.mood-chip:hover{border-color:var(--brand);background:var(--surface-2)}
+.mood-chip.on{border-color:var(--brand);background:var(--brand-soft);transform:scale(1.05)}
+.mood-emoji{width:20px;height:20px;stroke:var(--ink-2);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke var(--dur-s)}
+.mood-chip.on .mood-emoji{stroke:var(--brand)}
+
+/* week */
+.week{padding:14px 16px;background:var(--surface);border:1.5px solid var(--hair);margin-bottom:var(--space-4)}
+.week-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3)}
+.week-title{font-size:13px;font-weight:640;color:var(--ink);letter-spacing:-.01em}
+.week-meta{font-size:11px;color:var(--ink-2);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{display:flex;flex-direction:column;align-items:center;gap:5px}
+.day-lbl{font-size:10px;color:var(--ink-2);font-weight:680;letter-spacing:.04em}
+.day-dot{width:28px;height:28px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;transition:all var(--dur-s) var(--ease-spring)}
+.day-dot.clean{background:var(--brand);box-shadow:0 2px 8px var(--shadow-tint)}
+.day-dot.clean svg{width:14px;height:14px;stroke:#fff;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.day-dot.today{border:2px solid var(--brand);background:var(--brand-soft)}
+.day-dot.today svg{stroke:var(--brand)}
+.day-dot.future{opacity:.4}
+
+/* nível de vontade */
+.urge{padding:14px 16px;background:var(--surface);border:1.5px solid var(--hair);margin-bottom:var(--space-4)}
+.urge-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3)}
+.urge-title{font-size:13px;font-weight:640;color:var(--ink)}
+.urge-cta{border:0;background:transparent;color:var(--brand);font:inherit;font-size:12px;font-weight:640;cursor:pointer;letter-spacing:.02em}
+.urge-bar{display:flex;gap:4px;margin-bottom:6px}
+.urge-bar span{flex:1;height:8px;border-radius:4px;background:var(--surface-2);transition:background var(--dur-s)}
+.urge-bar span.on{background:var(--brand)}
+.urge-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-2);font-weight:500}
+
+/* bottom nav fixed */
+.botnav{position:absolute;left:0;right:0;bottom:0;z-index:10;display:flex;align-items:center;justify-content:space-around;
+  padding:8px 4px 14px;background:rgba(255,243,236,.92);backdrop-filter:blur(20px);border-top:1px solid var(--hair)}
+body.dark .botnav{background:rgba(14,31,27,.88)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border:0;background:transparent;font:inherit;cursor:pointer;color:var(--ink-2);transition:color var(--dur-s)}
+.tab svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tab-lbl{font-size:10px;font-weight:560;letter-spacing:.02em}
+.tab.on{color:var(--brand)}
+.tab.on .tab-lbl{font-weight:680}
+.tab.on .indicator{width:24px;height:3px;border-radius:2px;background:var(--brand);position:absolute;bottom:-8px}
+
+.android{font-family:var(--roboto)}
+.android .greet-name{font-variation-settings:'wght' 600}
+.android .cofre-hero,.android .tile,.android .week,.android .urge{border-radius:var(--radius-m)}
+.android .tab.on{position:relative}
+
+.ios{font-family:var(--sf)}
+.ios .cofre-hero,.ios .tile,.ios .week,.ios .urge{border-radius:var(--radius-s)}
+.ios .botnav{background:rgba(255,243,236,.7);backdrop-filter:saturate(1.4) blur(24px);-webkit-backdrop-filter:saturate(1.4) blur(24px)}
+body.dark .ios .botnav{background:rgba(14,31,27,.65)}
+
+.content > *, .header{opacity:0;animation:rise var(--dur-l) var(--ease-hig) forwards}
+.android .content > *, .android .header{animation-timing-function:var(--ease-spring)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.header{animation-delay:.05s}
+.content > .cofre-hero{animation-delay:.18s}
+.content > .quote{animation-delay:.42s}
+.content > .duo{animation-delay:.54s}
+.content > .week{animation-delay:.62s}
+.content > .urge{animation-delay:.7s}
+
+.notes{max-width:980px;margin:var(--space-7) auto 0;display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}
+.note{background:var(--studio-bg);border:1px solid rgba(127,127,127,.18);border-radius:var(--radius-m);padding:var(--space-5)}
+.note h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-3);opacity:.65}
+.note ul{list-style:none;font-size:13.5px;line-height:1.65}
+.note li{padding-left:16px;position:relative;margin-bottom:6px;opacity:.9}
+.note li:before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.note .ref{margin-top:var(--space-3);font-size:12px;opacity:.6;font-style:italic;padding-left:0}
+.note .ref:before{display:none}
+.note code{font-size:12px;background:rgba(127,127,127,.14);padding:1px 5px;border-radius:5px}
+@media(max-width:760px){.notes{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="studio-head">
+  <div class="brand-block">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18 a7 7 0 0 1 14 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M3 18h18" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div><div class="brand-name">Better</div><div class="brand-sub">17 · Dashboard</div></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="toggle-group" id="daysToggle">
+    <button class="seg" data-days="3">3 dias</button>
+    <button class="seg on" data-days="12">12 dias</button>
+    <button class="seg" data-days="45">45 dias</button>
+    <button class="seg" data-days="180">180 dias</button>
+  </div>
+  <button class="theme-btn" id="themeBtn" aria-label="Alternar tema">
+    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</div>
+
+<div class="stage">
+  <!-- ANDROID -->
+  <div class="phone-wrap">
+    <div class="os-label">Android · Material 3 Expressive</div>
+    <div class="phone">
+      <div class="status"><span>9:41</span><span class="r"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="3" width="3" height="8" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1" opacity=".3"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="2.5" y="2.5" width="14" height="7" rx="1.2" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen android" data-phone>
+        <div class="atmos"><div class="haze a"></div><div class="haze b"></div></div>
+        <header class="header">
+          <div class="greet">
+            <div class="greet-label">Bom dia,</div>
+            <div class="greet-name"><em>Lu</em></div>
+            <div class="greet-date">SEXTA · 27 DE JUNHO</div>
+          </div>
+          <button class="avatar" aria-label="Abrir perfil" title="Perfil">L</button>
+        </header>
+        <div class="content">
+          <!-- HERO: sol + anel de progresso -->
+          <div class="cofre-hero">
+            <div class="corner-glow"></div>
+            <div class="cofre-stage">
+              <div class="cofre-halo"></div>
+              <span class="cmote m1"></span><span class="cmote m2"></span><span class="cmote m3"></span>
+              <svg class="cofre-svg" viewBox="0 0 240 215" aria-label="Seu Cofre: um porquinho dourado">
+                <defs>
+                  <radialGradient id="bodyGrad" cx="38%" cy="30%" r="80%">
+                    <stop offset="0%" stop-color="var(--cofre-gold-light)"/>
+                    <stop offset="52%" stop-color="var(--cofre-gold)"/>
+                    <stop offset="100%" stop-color="var(--cofre-gold-deep)"/>
+                  </radialGradient>
+                  <radialGradient id="snoutGrad" cx="35%" cy="32%" r="85%">
+                    <stop offset="0%" stop-color="var(--cofre-gold-light)"/>
+                    <stop offset="60%" stop-color="var(--cofre-gold)"/>
+                    <stop offset="100%" stop-color="var(--cofre-gold-deep)"/>
+                  </radialGradient>
+                  <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--cofre-gold-light)"/>
+                    <stop offset="100%" stop-color="var(--cofre-gold)"/>
+                  </linearGradient>
+                  <linearGradient id="specGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.7"/>
+                    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+                  </linearGradient>
+                  <clipPath id="bodyClip"><ellipse cx="116" cy="112" rx="88" ry="62"/></clipPath>
+                </defs>
+                <ellipse cx="118" cy="200" rx="80" ry="11" fill="#000" opacity="0.10"/>
+                <g class="pig thump">
+                  <rect x="60" y="150" width="20" height="34" rx="9" fill="var(--cofre-gold-deep)"/>
+                  <rect x="158" y="150" width="20" height="34" rx="9" fill="var(--cofre-gold-deep)"/>
+                  <rect x="92" y="156" width="22" height="34" rx="10" fill="var(--cofre-gold)"/>
+                  <rect x="128" y="156" width="22" height="34" rx="10" fill="var(--cofre-gold)"/>
+                  <path d="M30,104 q-15,-3 -12,-16 q3,-10 13,-7" fill="none" stroke="var(--cofre-gold-deep)" stroke-width="7" stroke-linecap="round"/>
+                  <g class="pig-ear">
+                    <path d="M159,78 Q160,44 186,50 Q190,68 176,86 Q166,86 159,78 Z" fill="var(--cofre-gold-deep)"/>
+                    <path d="M166,76 Q168,54 182,59 Q183,71 174,80 Q169,80 166,76 Z" fill="var(--cofre-gold-light)" opacity="0.7"/>
+                  </g>
+                  <ellipse cx="116" cy="112" rx="88" ry="62" fill="url(#bodyGrad)"/>
+                  <g clip-path="url(#bodyClip)">
+                    <g class="liquid">
+                      <rect x="-160" y="128" width="560" height="120" fill="url(#fillGrad)"/>
+                      <path class="wave" d="M-160,128 q40,-11 80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 L400,250 L-160,250 Z" fill="url(#fillGrad)"/>
+                      <path class="wave w2" d="M-160,131 q40,9 80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 L400,250 L-160,250 Z" fill="var(--cofre-gold-light)"/>
+                    </g>
+                  </g>
+                  <ellipse cx="200" cy="116" rx="23" ry="27" fill="url(#snoutGrad)"/>
+                  <ellipse cx="200" cy="116" rx="3.6" ry="3" fill="var(--cofre-gold-deep)"/>
+                  <ellipse cx="212" cy="116" rx="3.6" ry="3" fill="var(--cofre-gold-deep)"/>
+                  <rect x="70" y="50" width="54" height="11" rx="5.5" transform="rotate(-11 97 55)" fill="var(--cofre-gold-deep)"/>
+                  <rect x="73" y="51.5" width="48" height="3.5" rx="1.75" transform="rotate(-11 97 55)" fill="#000" opacity="0.22"/>
+                  <circle class="pig-eye" cx="176" cy="98" r="6.5" fill="#3D2C1E"/>
+                  <circle cx="178.5" cy="95" r="2.1" fill="#FFFFFF" opacity="0.9"/>
+                  <ellipse cx="84" cy="78" rx="30" ry="17" fill="url(#specGrad)" transform="rotate(-18 84 78)"/>
+                </g>
+                <g class="dropcoin">
+                  <circle cx="100" cy="44" r="9" fill="url(#snoutGrad)" stroke="var(--cofre-gold-deep)" stroke-width="1.5"/>
+                  <text x="100" y="48" font-size="10" font-family="serif" text-anchor="middle" fill="var(--cofre-gold-deep)" font-weight="700">$</text>
+                </g>
+              </svg>
+            </div>
+            <div class="cofre-eyebrow">você já preservou</div>
+            <div class="cofre-amount-big"><span class="prefix">R$</span> <span data-amount>1.403</span></div>
+            <div class="cofre-days-chip"><span class="dot-live"></span><span data-days-big>23</span> dias limpos</div>
+            <div class="cofre-stats">
+              <div class="cofre-stat"><div class="cs-val">R$ 61</div><div class="cs-lbl">guardado hoje</div></div>
+              <div class="cofre-stat"><div class="cs-val cs-val-serif">23 dias</div><div class="cs-lbl">seu recorde</div></div>
+              <div class="cofre-stat"><div class="cs-val">R$ 1.403</div><div class="cs-lbl">este mês</div></div>
+            </div>
+          </div>
+
+          <!-- SOS como botão simples (era card grande) -->
+          <!-- frase motivacional -->
+          <div class="quote">Cada dia limpo é um pedaço da sua liberdade de volta.</div>
+
+          <!-- mood (single card sem dinheiro) -->
+          <div class="duo">
+            <div class="tile mood">
+              <div class="tile-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
+              <div class="tile-label">Como você está hoje?</div>
+              <div class="mood-chips" data-mood>
+                <button class="mood-chip" data-m="1" aria-label="Muito mal"><svg class="mood-emoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 16s1.5-2 4-2 4 2 4 2M9 9h.01M15 9h.01"/></svg></button>
+                <button class="mood-chip" data-m="2" aria-label="Mal"><svg class="mood-emoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 15h8M9 9h.01M15 9h.01"/></svg></button>
+                <button class="mood-chip on" data-m="3" aria-label="Ok"><svg class="mood-emoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 14h6M9 9h.01M15 9h.01"/></svg></button>
+                <button class="mood-chip" data-m="4" aria-label="Bem"><svg class="mood-emoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></button>
+              </div>
+            </div>
+            <div class="tile">
+              <div class="tile-ico"><svg viewBox="0 0 24 24"><path d="M3 18l5-5 4 4 9-9"/><path d="M21 8h-5V3"/></svg></div>
+              <div class="tile-label">Esta semana</div>
+              <div class="tile-big"><span class="prefix">+R$ </span>25</div>
+              <div class="tile-meta">economizados</div>
+            </div>
+          </div>
+
+          <!-- progresso da semana -->
+          <div class="week">
+            <div class="week-head">
+              <span class="week-title">Esta semana</span>
+              <span class="week-meta">5/7 dias limpos</span>
+            </div>
+            <div class="week-grid">
+              <div class="day"><span class="day-lbl">SEG</span><div class="day-dot clean"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div></div>
+              <div class="day"><span class="day-lbl">TER</span><div class="day-dot clean"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div></div>
+              <div class="day"><span class="day-lbl">QUA</span><div class="day-dot clean"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div></div>
+              <div class="day"><span class="day-lbl">QUI</span><div class="day-dot clean"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div></div>
+              <div class="day"><span class="day-lbl">SEX</span><div class="day-dot today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg></div></div>
+              <div class="day"><span class="day-lbl">SÁB</span><div class="day-dot future"></div></div>
+              <div class="day"><span class="day-lbl">DOM</span><div class="day-dot future"></div></div>
+            </div>
+          </div>
+
+          <!-- nível de vontade -->
+          <div class="urge">
+            <div class="urge-head">
+              <span class="urge-title">Vontade de apostar hoje</span>
+              <button class="urge-cta">Registrar +</button>
+            </div>
+            <div class="urge-bar"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></div>
+            <div class="urge-meta"><span>Nível 2 de 5 · baixa</span><span>Há 3 horas</span></div>
+          </div>
+        </div>
+
+        <!-- SOS: botão flutuante fixo, não rola com o conteúdo -->
+        <button class="sos-fab">
+          <span class="sos-fab-pulse"></span>
+          <svg viewBox="0 0 24 24"><path d="M19 13a7 7 0 1 1-14 0"/><path d="M12 2v11M8 6l4-4 4 4"/></svg>
+          <span class="sos-fab-label">SOS</span>
+        </button>
+
+        <!-- bottom nav -->
+        <nav class="botnav">
+          <button class="tab on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></svg><span class="tab-lbl">Home</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M17 4H7v5a5 5 0 0 0 10 0V4z"/><path d="M17 4h3v2a3 3 0 0 1-3 3M7 4H4v2a3 3 0 0 0 3 3"/></svg><span class="tab-lbl">Conquistas</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11 7.4L4 21l1.6-6A8 8 0 1 1 21 12z"/><circle cx="9" cy="12" r=".8" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r=".8" fill="currentColor" stroke="none"/></svg><span class="tab-lbl">Fórum</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M3 6.5L12 3l9 3.5L12 10z"/><path d="M3 6.5v6L12 16l9-3.5v-6"/><path d="M7 11v6c0 1.5 2.5 3 5 3s5-1.5 5-3v-6"/></svg><span class="tab-lbl">Learn</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="tab-lbl">Ajustes</span></button>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS -->
+  <div class="phone-wrap">
+    <div class="os-label">iOS 26 · Liquid Glass / HIG</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status"><span>9:41</span><span class="r"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="3" width="3" height="8" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="2.5" y="2.5" width="15" height="7" rx="1.2" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen ios" data-phone>
+        <div class="atmos"><div class="haze a"></div><div class="haze b"></div></div>
+        <header class="header">
+          <div class="greet">
+            <div class="greet-label">Bom dia,</div>
+            <div class="greet-name"><em>Lu</em></div>
+            <div class="greet-date">SEXTA · 27 DE JUNHO</div>
+          </div>
+          <button class="avatar" aria-label="Abrir perfil" title="Perfil">L</button>
+        </header>
+        <div class="content">
+          <div class="cofre-hero">
+            <div class="corner-glow"></div>
+            <div class="cofre-stage">
+              <div class="cofre-halo"></div>
+              <span class="cmote m1"></span><span class="cmote m2"></span><span class="cmote m3"></span>
+              <svg class="cofre-svg" viewBox="0 0 240 215" aria-label="Seu Cofre: um porquinho dourado">
+                <defs>
+                  <radialGradient id="bodyGradI" cx="38%" cy="30%" r="80%">
+                    <stop offset="0%" stop-color="var(--cofre-gold-light)"/>
+                    <stop offset="52%" stop-color="var(--cofre-gold)"/>
+                    <stop offset="100%" stop-color="var(--cofre-gold-deep)"/>
+                  </radialGradient>
+                  <radialGradient id="snoutGradI" cx="35%" cy="32%" r="85%">
+                    <stop offset="0%" stop-color="var(--cofre-gold-light)"/>
+                    <stop offset="60%" stop-color="var(--cofre-gold)"/>
+                    <stop offset="100%" stop-color="var(--cofre-gold-deep)"/>
+                  </radialGradient>
+                  <linearGradient id="fillGradI" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--cofre-gold-light)"/>
+                    <stop offset="100%" stop-color="var(--cofre-gold)"/>
+                  </linearGradient>
+                  <linearGradient id="specGradI" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.7"/>
+                    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+                  </linearGradient>
+                  <clipPath id="bodyClipI"><ellipse cx="116" cy="112" rx="88" ry="62"/></clipPath>
+                </defs>
+                <ellipse cx="118" cy="200" rx="80" ry="11" fill="#000" opacity="0.10"/>
+                <g class="pig thump">
+                  <rect x="60" y="150" width="20" height="34" rx="9" fill="var(--cofre-gold-deep)"/>
+                  <rect x="158" y="150" width="20" height="34" rx="9" fill="var(--cofre-gold-deep)"/>
+                  <rect x="92" y="156" width="22" height="34" rx="10" fill="var(--cofre-gold)"/>
+                  <rect x="128" y="156" width="22" height="34" rx="10" fill="var(--cofre-gold)"/>
+                  <path d="M30,104 q-15,-3 -12,-16 q3,-10 13,-7" fill="none" stroke="var(--cofre-gold-deep)" stroke-width="7" stroke-linecap="round"/>
+                  <g class="pig-ear">
+                    <path d="M159,78 Q160,44 186,50 Q190,68 176,86 Q166,86 159,78 Z" fill="var(--cofre-gold-deep)"/>
+                    <path d="M166,76 Q168,54 182,59 Q183,71 174,80 Q169,80 166,76 Z" fill="var(--cofre-gold-light)" opacity="0.7"/>
+                  </g>
+                  <ellipse cx="116" cy="112" rx="88" ry="62" fill="url(#bodyGradI)"/>
+                  <g clip-path="url(#bodyClipI)">
+                    <g class="liquid">
+                      <rect x="-160" y="128" width="560" height="120" fill="url(#fillGradI)"/>
+                      <path class="wave" d="M-160,128 q40,-11 80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 L400,250 L-160,250 Z" fill="url(#fillGradI)"/>
+                      <path class="wave w2" d="M-160,131 q40,9 80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 L400,250 L-160,250 Z" fill="var(--cofre-gold-light)"/>
+                    </g>
+                  </g>
+                  <ellipse cx="200" cy="116" rx="23" ry="27" fill="url(#snoutGradI)"/>
+                  <ellipse cx="200" cy="116" rx="3.6" ry="3" fill="var(--cofre-gold-deep)"/>
+                  <ellipse cx="212" cy="116" rx="3.6" ry="3" fill="var(--cofre-gold-deep)"/>
+                  <rect x="70" y="50" width="54" height="11" rx="5.5" transform="rotate(-11 97 55)" fill="var(--cofre-gold-deep)"/>
+                  <rect x="73" y="51.5" width="48" height="3.5" rx="1.75" transform="rotate(-11 97 55)" fill="#000" opacity="0.22"/>
+                  <circle class="pig-eye" cx="176" cy="98" r="6.5" fill="#3D2C1E"/>
+                  <circle cx="178.5" cy="95" r="2.1" fill="#FFFFFF" opacity="0.9"/>
+                  <ellipse cx="84" cy="78" rx="30" ry="17" fill="url(#specGradI)" transform="rotate(-18 84 78)"/>
+                </g>
+                <g class="dropcoin">
+                  <circle cx="100" cy="44" r="9" fill="url(#snoutGradI)" stroke="var(--cofre-gold-deep)" stroke-width="1.5"/>
+                  <text x="100" y="48" font-size="10" font-family="serif" text-anchor="middle" fill="var(--cofre-gold-deep)" font-weight="700">$</text>
+                </g>
+              </svg>
+            </div>
+            <div class="cofre-eyebrow">você já preservou</div>
+            <div class="cofre-amount-big"><span class="prefix">R$</span> <span data-amount>1.403</span></div>
+            <div class="cofre-days-chip"><span class="dot-live"></span><span data-days-big>23</span> dias limpos</div>
+            <div class="cofre-stats">
+              <div class="cofre-stat"><div class="cs-val">R$ 61</div><div class="cs-lbl">guardado hoje</div></div>
+              <div class="cofre-stat"><div class="cs-val cs-val-serif">23 dias</div><div class="cs-lbl">seu recorde</div></div>
+              <div class="cofre-stat"><div class="cs-val">R$ 1.403</div><div class="cs-lbl">este mês</div></div>
+            </div>
+          </div>
+
+          <div class="quote">Cada dia limpo é um pedaço da sua liberdade de volta.</div>
+
+          <div class="duo">
+            <div class="tile mood">
+              <div class="tile-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
+              <div class="tile-label">Como você está hoje?</div>
+              <div class="mood-chips" data-mood>
+                <button class="mood-chip" data-m="1" aria-label="Muito mal"><svg class="mood-emoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 16s1.5-2 4-2 4 2 4 2M9 9h.01M15 9h.01"/></svg></button>
+                <button class="mood-chip" data-m="2" aria-label="Mal"><svg class="mood-emoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 15h8M9 9h.01M15 9h.01"/></svg></button>
+                <button class="mood-chip on" data-m="3" aria-label="Ok"><svg class="mood-emoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 14h6M9 9h.01M15 9h.01"/></svg></button>
+                <button class="mood-chip" data-m="4" aria-label="Bem"><svg class="mood-emoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></button>
+              </div>
+            </div>
+            <div class="tile">
+              <div class="tile-ico"><svg viewBox="0 0 24 24"><path d="M3 18l5-5 4 4 9-9"/><path d="M21 8h-5V3"/></svg></div>
+              <div class="tile-label">Esta semana</div>
+              <div class="tile-big"><span class="prefix">+R$ </span>25</div>
+              <div class="tile-meta">economizados</div>
+            </div>
+          </div>
+
+          <div class="week">
+            <div class="week-head">
+              <span class="week-title">Esta semana</span>
+              <span class="week-meta">5/7 dias limpos</span>
+            </div>
+            <div class="week-grid">
+              <div class="day"><span class="day-lbl">SEG</span><div class="day-dot clean"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div></div>
+              <div class="day"><span class="day-lbl">TER</span><div class="day-dot clean"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div></div>
+              <div class="day"><span class="day-lbl">QUA</span><div class="day-dot clean"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div></div>
+              <div class="day"><span class="day-lbl">QUI</span><div class="day-dot clean"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div></div>
+              <div class="day"><span class="day-lbl">SEX</span><div class="day-dot today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg></div></div>
+              <div class="day"><span class="day-lbl">SÁB</span><div class="day-dot future"></div></div>
+              <div class="day"><span class="day-lbl">DOM</span><div class="day-dot future"></div></div>
+            </div>
+          </div>
+
+          <div class="urge">
+            <div class="urge-head">
+              <span class="urge-title">Vontade de apostar hoje</span>
+              <button class="urge-cta">Registrar +</button>
+            </div>
+            <div class="urge-bar"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></div>
+            <div class="urge-meta"><span>Nível 2 de 5 · baixa</span><span>Há 3 horas</span></div>
+          </div>
+        </div>
+
+        <!-- SOS: botão flutuante fixo, não rola com o conteúdo -->
+        <button class="sos-fab">
+          <span class="sos-fab-pulse"></span>
+          <svg viewBox="0 0 24 24"><path d="M19 13a7 7 0 1 1-14 0"/><path d="M12 2v11M8 6l4-4 4 4"/></svg>
+          <span class="sos-fab-label">SOS</span>
+        </button>
+
+        <nav class="botnav">
+          <button class="tab on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></svg><span class="tab-lbl">Home</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M17 4H7v5a5 5 0 0 0 10 0V4z"/><path d="M17 4h3v2a3 3 0 0 1-3 3M7 4H4v2a3 3 0 0 0 3 3"/></svg><span class="tab-lbl">Conquistas</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11 7.4L4 21l1.6-6A8 8 0 1 1 21 12z"/><circle cx="9" cy="12" r=".8" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r=".8" fill="currentColor" stroke="none"/></svg><span class="tab-lbl">Fórum</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M3 6.5L12 3l9 3.5L12 10z"/><path d="M3 6.5v6L12 16l9-3.5v-6"/><path d="M7 11v6c0 1.5 2.5 3 5 3s5-1.5 5-3v-6"/></svg><span class="tab-lbl">Learn</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="tab-lbl">Ajustes</span></button>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notes">
+  <div class="note">
+    <h3>Android · M3E</h3>
+    <ul>
+      <li>Hero: anel de progresso até próximo marco (7→30→90→365 dias) com 4 milestone dots; sol nascente line-art no centro com raios pulsando aleatoriamente.</li>
+      <li>SOS card com borda colorida lateral e pulse animado no ícone — destaque emocional sem alarmismo.</li>
+      <li>Bottom nav 5 tabs (Home, Conquistas, Fórum, Learn, Ajustes) com indicator pill abaixo do ativo.</li>
+      <li>Avatar com inicial no header (canto direito) abre o perfil — padrão universal "minha conta".</li>
+      <li class="ref">Ref.: I Am Sober (contador hero), Finch (cards diários), Gentler Streak (anel de progresso).</li>
+    </ul>
+  </div>
+  <div class="note">
+    <h3>iOS · HIG / Liquid Glass</h3>
+    <ul>
+      <li>Bottom tab bar em Liquid Glass: fundo translúcido com <code>backdrop-filter blur(24px)</code> + saturação.</li>
+      <li>Saudação personalizada com apelido em serif itálico — uso da resposta da P1 do onboarding.</li>
+      <li>Toggle no estúdio simula 4 estados (3, 12, 45, 180 dias) — mostra como o anel/marcos evoluem.</li>
+      <li>Frase motivacional em serif itálico com aspas tipográficas — leveza editorial.</li>
+      <li class="ref">Ref.: I Am Sober (contador limpo), Calm (paleta dessaturada), Headspace (estrutura modular).</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const body=document.body, themeBtn=document.getElementById('themeBtn'), icon=document.getElementById('themeIcon');
+const moon='<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+const sun='<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+themeBtn.onclick=()=>{body.classList.toggle('dark');icon.innerHTML=body.classList.contains('dark')?moon:sun;};
+
+const CIRC = 2*Math.PI*100; // 628.32
+
+// estados de dias para o toggle estúdio
+const DAYS_STATES = {
+  3: { next: 7, nextLbl: '4 dias para 7 dias' },
+  12: { next: 30, nextLbl: '18 dias para 30 dias' },
+  45: { next: 90, nextLbl: '45 dias para 90 dias' },
+  180: { next: 365, nextLbl: '185 dias para 1 ano' }
+};
+
+function setDays(phone, days){
+  const cfg = DAYS_STATES[days];
+  // pct = dias / próximo marco
+  const pct = Math.min(1, days / cfg.next);
+  const ring = phone.querySelector('[data-ring]');
+  const bigEl = phone.querySelector('[data-days-big]');
+  const nextEl = phone.querySelector('[data-next]');
+  ring.style.strokeDashoffset = CIRC * (1 - pct);
+  bigEl.textContent = days;
+  nextEl.innerHTML = `faltam <strong>${cfg.next-days} dias</strong> para o marco de ${cfg.next} dias`;
+}
+
+// mood select
+document.querySelectorAll('[data-mood]').forEach(group=>{
+  group.addEventListener('click',e=>{
+    const c=e.target.closest('.mood-chip'); if(!c)return;
+    group.querySelectorAll('.mood-chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+  });
+});
+
+// toggle dias estúdio
+document.getElementById('daysToggle').addEventListener('click',e=>{
+  const b=e.target.closest('.seg'); if(!b)return;
+  const days = parseInt(b.dataset.days,10);
+  document.querySelectorAll('#daysToggle .seg').forEach(s=>s.classList.remove('on'));
+  b.classList.add('on');
+  document.querySelectorAll('[data-phone]').forEach(p=>setDays(p, days));
+});
+</script>
+</body>
+</html>

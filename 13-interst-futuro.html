@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>be better — Intersticial · Seu futuro sem aposta</title>
+<style>
+:root{
+  --sf:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',sans-serif;
+  --roboto:'Roboto Flex','Roboto',system-ui,sans-serif;
+  --serif:'Newsreader','Georgia',serif;
+  --brand:#E8663D; --brand-deep:#C7416B; --brand-soft:#FDE3D6;
+  --accent:#F2A65A;
+  --bg:#FFF3EC; --surface:#FFFFFF; --surface-2:#FCE6DA;
+  --ink:#3A2230; --ink-2:#8A6A6E; --hair:#F3D6C8;
+  --shadow-tint:rgba(199,65,107,.4);
+  --studio-bg:#F6E7DD; --studio-ink:#5a3340;
+  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-hig:cubic-bezier(0.32,0.72,0,1);
+  --dur-s:.28s;--dur-m:.5s;--dur-l:.9s;--dur-theme:.7s;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;
+  --radius-l:28px;--radius-m:20px;--radius-s:14px;--radius-pill:999px;
+}
+body.dark{
+  --brand:#E89160; --brand-deep:#C25E3F; --brand-soft:#2A1F1B;
+  --accent:#F2A65A;
+  --bg:#0E1F1B; --surface:#16322B; --surface-2:#1D403A;
+  --ink:#DCE6E2; --ink-2:#7E9389; --hair:#243D36;
+  --shadow-tint:rgba(232,145,96,.4);
+  --studio-bg:#0A1714; --studio-ink:#a8c5bd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sf);background:var(--studio-bg);color:var(--studio-ink);transition:background var(--dur-theme) ease,color var(--dur-theme) ease;min-height:100vh;padding:var(--space-6) var(--space-5) var(--space-7)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.studio-head{max-width:980px;margin:0 auto var(--space-6);display:flex;align-items:center;gap:var(--space-5);flex-wrap:wrap}
+.brand-block{display:flex;align-items:center;gap:var(--space-3)}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(160deg,var(--brand),var(--brand-deep));display:grid;place-items:center;box-shadow:0 6px 16px var(--shadow-tint)}
+.brand-mark svg{width:22px;height:22px}
+.brand-name{font-weight:680;font-size:19px;letter-spacing:-.02em}
+.brand-sub{font-size:12.5px;opacity:.6;margin-top:1px}
+.spacer{flex:1}
+.theme-btn{border:0;cursor:pointer;width:42px;height:42px;border-radius:var(--radius-pill);background:rgba(127,127,127,.14);color:inherit;display:grid;place-items:center;transition:transform var(--dur-s) var(--ease-spring)}
+.theme-btn:active{transform:scale(.9) rotate(-20deg)}
+.theme-btn svg{width:20px;height:20px}
+
+.stage{max-width:980px;margin:0 auto;display:flex;gap:var(--space-7);justify-content:center;flex-wrap:wrap}
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:var(--space-3)}
+.os-label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.5}
+.phone{width:340px;height:720px;border-radius:46px;position:relative;overflow:hidden;background:var(--bg);transition:background var(--dur-theme) ease;box-shadow:0 0 0 11px #1a1a1c,0 0 0 13px #2c2c2e,0 36px 70px -20px rgba(20,20,40,.55)}
+.status{position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:14px;font-weight:600;color:var(--ink);z-index:30}
+.status .r{display:flex;gap:6px;align-items:center}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:108px;height:30px;background:#000;border-radius:18px;z-index:31}
+.screen{position:absolute;inset:0;padding-top:50px;display:flex;flex-direction:column;overflow:hidden}
+
+.atmos{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.haze{position:absolute;border-radius:50%;filter:blur(70px);opacity:.4}
+.haze.a{width:300px;height:300px;background:var(--brand);top:-110px;left:50%;transform:translateX(-50%)}
+.haze.b{width:240px;height:240px;background:var(--accent);bottom:60px;right:-90px;opacity:.26}
+
+.topnav{position:relative;z-index:5;padding:var(--space-4) var(--space-5);display:flex;align-items:center;justify-content:space-between}
+.back-btn{width:40px;height:40px;border-radius:var(--radius-pill);border:0;background:transparent;color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:background var(--dur-s)}
+.back-btn:hover{background:rgba(127,127,127,.12)}
+.back-btn svg{width:22px;height:22px}
+.dots{display:flex;gap:5px;align-items:center}
+.dot-p{width:6px;height:6px;border-radius:50%;background:var(--ink-2);opacity:.25}
+.dot-p.done{background:var(--brand);opacity:1}
+
+.content{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;padding:var(--space-5) var(--space-5) 110px;overflow-y:auto;scrollbar-width:none}
+.content::-webkit-scrollbar{display:none}
+
+.greet{font-family:var(--serif);font-style:normal;font-size:16px;font-weight:500;color:var(--brand);letter-spacing:-.01em;line-height:1.3;margin-bottom:var(--space-3)}
+
+.headline{font-family:var(--serif);font-size:27px;line-height:1.18;font-weight:600;letter-spacing:-.02em;color:var(--ink);max-width:16ch;margin-bottom:var(--space-5)}
+
+/* lista de itens com check */
+.future-list{display:flex;flex-direction:column;gap:var(--space-4);margin-bottom:var(--space-6)}
+.future-item{display:flex;align-items:flex-start;gap:var(--space-3)}
+.check-ico{width:26px;height:26px;border-radius:50%;background:var(--brand-soft);display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+.check-ico svg{width:14px;height:14px;stroke:var(--brand);stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.future-text{font-size:15.5px;line-height:1.4;color:var(--ink);font-weight:500;padding-top:3px}
+
+/* frase de fechamento */
+.reframe{font-family:var(--serif);font-style:italic;font-size:16px;font-weight:400;color:var(--ink-2);line-height:1.5;max-width:28ch}
+.reframe em{color:var(--brand);font-style:italic;font-weight:600}
+
+.cta-wrap{position:absolute;left:0;right:0;bottom:0;z-index:10;padding:var(--space-5);background:linear-gradient(to top,var(--bg) 70%,transparent 100%)}
+.cta{width:100%;border:0;cursor:pointer;font:inherit;color:#fff;font-weight:640;font-size:16px;text-transform:lowercase;background:linear-gradient(165deg,var(--brand),var(--brand-deep));box-shadow:0 10px 24px -6px var(--shadow-tint),inset 0 1px 0 rgba(255,255,255,.22);padding:16px;transition:all var(--dur-s) var(--ease-spring)}
+.cta:active{transform:scale(.97)}
+
+.android{font-family:var(--roboto)}
+.android .cta{border-radius:var(--radius-pill);transition:transform var(--dur-s) var(--ease-spring),border-radius var(--dur-m) var(--ease-spring)}
+.android .cta:active{border-radius:var(--radius-m)}
+
+.ios{font-family:var(--sf)}
+.ios .cta{border-radius:var(--radius-s)}
+.ios .glasshint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--ink);opacity:.18}
+
+.content > *, .topnav{opacity:0;animation:rise var(--dur-l) var(--ease-hig) forwards}
+.android .content > *, .android .topnav{animation-timing-function:var(--ease-spring)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.topnav{animation-delay:.05s}
+.content > .greet{animation-delay:.18s}
+.content > .headline{animation-delay:.28s}
+.content > .future-list{animation-delay:.4s}
+.content > .reframe{animation-delay:1s}
+.cta-wrap{opacity:0;animation:rise var(--dur-l) var(--ease-hig) 1.2s forwards}
+
+/* cada item entra em cascata própria */
+.future-item{opacity:0;animation:itemRise .6s var(--ease-hig) forwards}
+.android .future-item{animation-timing-function:var(--ease-spring)}
+@keyframes itemRise{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+.future-item:nth-child(1){animation-delay:.5s}
+.future-item:nth-child(2){animation-delay:.62s}
+.future-item:nth-child(3){animation-delay:.74s}
+.future-item:nth-child(4){animation-delay:.86s}
+
+.notes{max-width:980px;margin:var(--space-7) auto 0;display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}
+.note{background:var(--studio-bg);border:1px solid rgba(127,127,127,.18);border-radius:var(--radius-m);padding:var(--space-5)}
+.note h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-3);opacity:.65}
+.note ul{list-style:none;font-size:13.5px;line-height:1.65}
+.note li{padding-left:16px;position:relative;margin-bottom:6px;opacity:.9}
+.note li:before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.note .ref{margin-top:var(--space-3);font-size:12px;opacity:.6;font-style:italic;padding-left:0}
+.note .ref:before{display:none}
+.note code{font-size:12px;background:rgba(127,127,127,.14);padding:1px 5px;border-radius:5px}
+@media(max-width:760px){.notes{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="studio-head">
+  <div class="brand-block">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18 a7 7 0 0 1 14 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M3 18h18" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div><div class="brand-name">Better</div><div class="brand-sub">13 · Seu futuro</div></div>
+  </div>
+  <div class="spacer"></div>
+  <button class="theme-btn" id="themeBtn" aria-label="Alternar tema">
+    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</div>
+
+<div class="stage">
+  <div class="phone-wrap">
+    <div class="os-label">Android · Material 3 Expressive</div>
+    <div class="phone">
+      <div class="status"><span>9:41</span><span class="r"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="3" width="3" height="8" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1" opacity=".3"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="2.5" y="2.5" width="14" height="7" rx="1.2" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen android">
+        <div class="atmos"><div class="haze a"></div><div class="haze b"></div></div>
+        <nav class="topnav">
+          <button class="back-btn" aria-label="Voltar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <div class="dots"><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p"></span></div>
+          <span style="width:40px"></span>
+        </nav>
+        <div class="content">
+          <div class="greet">Olha pra frente comigo, Lu.</div>
+          <h1 class="headline">Daqui a 90 dias, sem apostar:</h1>
+
+          <div class="future-list">
+            <div class="future-item">
+              <span class="check-ico"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+              <span class="future-text">Você dorme a noite toda de novo.</span>
+            </div>
+            <div class="future-item">
+              <span class="check-ico"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+              <span class="future-text">A dívida começa a encolher.</span>
+            </div>
+            <div class="future-item">
+              <span class="check-ico"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+              <span class="future-text">A cabeça desacelera, a ansiedade afrouxa.</span>
+            </div>
+            <div class="future-item">
+              <span class="check-ico"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+              <span class="future-text">Você olha sua família no olho, sem esconder.</span>
+            </div>
+          </div>
+
+          <div class="reframe">Esse futuro começa no seu <em>primeiro dia limpo</em>.</div>
+        </div>
+        <div class="cta-wrap"><button class="cta">quero esse futuro</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone-wrap">
+    <div class="os-label">iOS 26 · Liquid Glass / HIG</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status"><span>9:41</span><span class="r"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="3" width="3" height="8" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="2.5" y="2.5" width="15" height="7" rx="1.2" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen ios">
+        <div class="atmos"><div class="haze a"></div><div class="haze b"></div></div>
+        <nav class="topnav">
+          <button class="back-btn" aria-label="Voltar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <div class="dots"><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p"></span></div>
+          <span style="width:40px"></span>
+        </nav>
+        <div class="content">
+          <div class="greet">Olha pra frente comigo, Lu.</div>
+          <h1 class="headline">Daqui a 90 dias, sem apostar:</h1>
+
+          <div class="future-list">
+            <div class="future-item">
+              <span class="check-ico"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+              <span class="future-text">Você dorme a noite toda de novo.</span>
+            </div>
+            <div class="future-item">
+              <span class="check-ico"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+              <span class="future-text">A dívida começa a encolher.</span>
+            </div>
+            <div class="future-item">
+              <span class="check-ico"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+              <span class="future-text">A cabeça desacelera, a ansiedade afrouxa.</span>
+            </div>
+            <div class="future-item">
+              <span class="check-ico"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+              <span class="future-text">Você olha sua família no olho, sem esconder.</span>
+            </div>
+          </div>
+
+          <div class="reframe">Esse futuro começa no seu <em>primeiro dia limpo</em>.</div>
+        </div>
+        <div class="cta-wrap"><button class="cta">quero esse futuro</button></div>
+      </div>
+      <div class="glasshint"></div>
+    </div>
+  </div>
+</div>
+
+<div class="notes">
+  <div class="note">
+    <h3>Estilo clean (mesmo padrão da família)</h3>
+    <ul>
+      <li>Saudação íntima: "Olha pra frente comigo, Lu." — convite a imaginar junto, não afirmação distante.</li>
+      <li>Headline curta: "Daqui a 90 dias, sem apostar:" — dois-pontos abrem a lista, criando expectativa.</li>
+      <li>4 itens com check circular em <code>brand-soft</code> — cada um entra em cascata lateral (itemRise).</li>
+      <li>Progressão emocional dos itens: sono → dívida → mente → relações — do físico ao mais profundo.</li>
+      <li class="ref">Ref.: tela "Seu futuro sem aposta" do app be better, adaptada pra paleta laranja.</li>
+    </ul>
+  </div>
+  <div class="note">
+    <h3>Fechamento e identidade</h3>
+    <ul>
+      <li>Frase final: "Esse futuro começa no seu <em>primeiro dia limpo</em>." — ação imediata, sem prazo abstrato.</li>
+      <li>CTA: "quero esse futuro" — primeira pessoa, desejo declarado.</li>
+      <li>Sem números, sem estatísticas — é a tela mais sensorial/emocional da sequência, equilibrando com a Virada (números) e Malefícios (estatística).</li>
+      <li>Posição sugerida: pode entrar após a P8 (meta) e antes do Benefícios, ou substituir uma das existentes.</li>
+      <li class="ref">Paleta mantida: laranja-coral em vez do verde teal da referência.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const body=document.body, themeBtn=document.getElementById('themeBtn'), icon=document.getElementById('themeIcon');
+const moon='<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+const sun='<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+themeBtn.onclick=()=>{body.classList.toggle('dark');icon.innerHTML=body.classList.contains('dark')?moon:sun;};
+</script>
+</body>
+</html>

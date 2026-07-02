@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Better — 02 Onboarding · Pergunta 1</title>
+<style>
+:root{
+  --sf:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',sans-serif;
+  --roboto:'Roboto Flex','Roboto',system-ui,sans-serif;
+  --serif:'Newsreader','Georgia',serif;
+  /* LIGHT = PÔR DO SOL */
+  --brand:#E8663D; --brand-deep:#C7416B; --brand-soft:#FDE3D6;
+  --accent:#F2A65A; --warning:#E0894A;
+  --bg:#FFF3EC; --surface:#FFFFFF; --surface-2:#FCE6DA;
+  --ink:#3A2230; --ink-2:#8A6A6E; --hair:#F3D6C8;
+  --sky-top:#FFD9A8; --sky-mid:#FBA06A; --sky-low:#E8663D;
+  --shadow-tint:rgba(199,65,107,.4);
+  --studio-bg:#F6E7DD; --studio-ink:#5a3340;
+  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-hig:cubic-bezier(0.32,0.72,0,1);
+  --dur-s:.28s; --dur-m:.5s; --dur-l:.9s; --dur-theme:.7s;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;
+  --radius-l:28px;--radius-m:20px;--radius-s:14px;--radius-pill:999px;
+}
+body.dark{
+  /* DARK = CÉU NOTURNO AZUL-VERDE, SOL QUENTE */
+  --brand:#E89160; --brand-deep:#C25E3F; --brand-soft:#2A1F1B;
+  --accent:#F2A65A; --warning:#D89060;
+  --bg:#0E1F1B; --surface:#16322B; --surface-2:#1D403A;
+  --ink:#DCE6E2; --ink-2:#7E9389; --hair:#243D36;
+  --shadow-tint:rgba(232,145,96,.4);
+  --studio-bg:#0A1714; --studio-ink:#a8c5bd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sf);background:var(--studio-bg);color:var(--studio-ink);
+  transition:background var(--dur-theme) ease,color var(--dur-theme) ease;min-height:100vh;padding:var(--space-6) var(--space-5) var(--space-7)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.studio-head{max-width:980px;margin:0 auto var(--space-6);display:flex;align-items:center;gap:var(--space-5);flex-wrap:wrap}
+.brand-block{display:flex;align-items:center;gap:var(--space-3)}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(160deg,var(--brand),var(--brand-deep));display:grid;place-items:center;box-shadow:0 6px 16px var(--shadow-tint)}
+.brand-mark svg{width:22px;height:22px}
+.brand-name{font-weight:680;font-size:19px;letter-spacing:-.02em}
+.brand-sub{font-size:12.5px;opacity:.6;margin-top:1px}
+.spacer{flex:1}
+.toggle-group{display:flex;gap:var(--space-1);background:rgba(127,127,127,.14);padding:4px;border-radius:var(--radius-pill)}
+.seg{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:560;padding:7px 14px;border-radius:var(--radius-pill);cursor:pointer;opacity:.62;transition:all var(--dur-s) var(--ease-hig)}
+.seg.on{background:var(--brand);color:#fff;opacity:1;box-shadow:0 3px 10px var(--shadow-tint)}
+.theme-btn{border:0;cursor:pointer;width:42px;height:42px;border-radius:var(--radius-pill);background:rgba(127,127,127,.14);color:inherit;display:grid;place-items:center;transition:transform var(--dur-s) var(--ease-spring)}
+.theme-btn:active{transform:scale(.9) rotate(-20deg)}
+.theme-btn svg{width:20px;height:20px}
+
+.stage{max-width:980px;margin:0 auto;display:flex;gap:var(--space-7);justify-content:center;flex-wrap:wrap}
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:var(--space-3)}
+.os-label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.5}
+.phone{width:340px;height:720px;border-radius:46px;position:relative;overflow:hidden;background:var(--bg);
+  transition:background var(--dur-theme) ease;box-shadow:0 0 0 11px #1a1a1c,0 0 0 13px #2c2c2e,0 36px 70px -20px rgba(20,20,40,.55)}
+.status{position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:14px;font-weight:600;color:var(--ink);z-index:30}
+.status .r{display:flex;gap:6px;align-items:center}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:108px;height:30px;background:#000;border-radius:18px;z-index:31}
+.screen{position:absolute;inset:0;padding-top:50px;display:flex;flex-direction:column}
+
+/* atmosphere */
+.atmos{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.haze{position:absolute;border-radius:50%;filter:blur(50px);opacity:.32}
+.haze.a{width:260px;height:260px;background:var(--brand);top:-80px;right:-60px}
+.haze.b{width:200px;height:200px;background:var(--accent);bottom:80px;left:-60px;opacity:.22}
+
+/* top nav */
+.topnav{position:relative;z-index:5;padding:var(--space-4) var(--space-5);display:flex;align-items:center;justify-content:space-between}
+.back-btn{width:40px;height:40px;border-radius:var(--radius-pill);border:0;background:transparent;color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:background var(--dur-s)}
+.back-btn:hover{background:rgba(127,127,127,.12)}
+.back-btn svg{width:22px;height:22px}
+.dots{display:flex;gap:5px;align-items:center}
+.dot-p{width:6px;height:6px;border-radius:50%;background:var(--ink-2);opacity:.25;transition:all var(--dur-m) var(--ease-hig)}
+.dot-p.done{background:var(--brand);opacity:1}
+.dot-p.current{width:20px;border-radius:4px;background:var(--brand);opacity:1}
+.skip{border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:14px;font-weight:560;cursor:pointer;padding:8px 6px;opacity:.8}
+
+/* content */
+.content{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;padding:var(--space-4) var(--space-5) var(--space-5)}
+.eyebrow{font-size:11.5px;font-weight:640;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-bottom:var(--space-2)}
+.headline{font-size:23px;line-height:1.2;font-weight:720;letter-spacing:-.02em;color:var(--ink);max-width:18ch;margin-bottom:var(--space-2)}
+.headline em{font-family:var(--serif);font-style:italic;font-weight:500;color:var(--brand)}
+.sub{font-size:14px;line-height:1.45;color:var(--ink-2);max-width:32ch;margin-bottom:var(--space-4)}
+
+/* chips */
+.chips{display:flex;flex-direction:column;gap:var(--space-2);margin-bottom:auto}
+.chip{display:flex;align-items:center;gap:var(--space-3);padding:11px 14px;background:var(--surface);border:1.5px solid var(--hair);
+  cursor:pointer;text-align:left;font:inherit;color:var(--ink);font-size:14.5px;font-weight:560;
+  transition:all var(--dur-s) var(--ease-hig);position:relative}
+.chip:hover{border-color:var(--brand);background:var(--surface-2)}
+.chip.on{border-color:var(--brand);background:var(--brand-soft);color:var(--ink)}
+.chip-ico{width:32px;height:32px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex-shrink:0;transition:all var(--dur-s)}
+.chip.on .chip-ico{background:var(--brand);color:#fff}
+.chip-ico svg{width:18px;height:18px;stroke:var(--brand);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke var(--dur-s)}
+.chip.on .chip-ico svg{stroke:#fff}
+.chip-lbl{flex:1;line-height:1.25}
+.chip-lbl small{display:block;font-size:11.5px;font-weight:480;color:var(--ink-2);margin-top:1px}
+.chip.on .chip-lbl small{color:var(--ink);opacity:.7}
+.check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--hair);display:grid;place-items:center;flex-shrink:0;transition:all var(--dur-s) var(--ease-spring)}
+.chip.on .check{background:var(--brand);border-color:var(--brand);transform:scale(1.05)}
+.check svg{width:11px;height:11px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity var(--dur-s)}
+.chip.on .check svg{opacity:1}
+
+/* reassurance */
+.reassure{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);margin-bottom:var(--space-3);margin-top:var(--space-3);opacity:.85}
+.reassure svg{width:14px;height:14px;flex-shrink:0}
+
+/* cta */
+.cta{width:100%;border:0;cursor:pointer;font:inherit;color:#fff;font-weight:640;font-size:16.5px;
+  background:linear-gradient(165deg,var(--brand),var(--brand-deep));
+  box-shadow:0 10px 24px -6px var(--shadow-tint),inset 0 1px 0 rgba(255,255,255,.22);
+  padding:16px;transition:all var(--dur-s) var(--ease-spring)}
+.cta:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.cta:not(:disabled):active{transform:scale(.97)}
+
+/* ANDROID specifics */
+.android{font-family:var(--roboto)}
+.android .eyebrow{font-variation-settings:'wght' 640,'wdth' 105}
+.android .headline{font-variation-settings:'wght' 760,'wdth' 110}
+.android .chip{border-radius:var(--radius-m)}
+.android .cta{border-radius:var(--radius-pill);transition:transform var(--dur-s) var(--ease-spring),border-radius var(--dur-m) var(--ease-spring)}
+.android .cta:not(:disabled):active{border-radius:var(--radius-m)}
+
+/* iOS specifics */
+.ios{font-family:var(--sf)}
+.ios .headline{font-weight:740}
+.ios .chip{border-radius:var(--radius-s)}
+.ios .cta{border-radius:var(--radius-s)}
+.ios .glasshint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--ink);opacity:.18}
+
+/* enter animations */
+.content > *, .topnav{opacity:0;animation:rise var(--dur-l) var(--ease-hig) forwards}
+.android .content > *, .android .topnav{animation-timing-function:var(--ease-spring)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.topnav{animation-delay:.05s}
+.content > .eyebrow{animation-delay:.18s}
+.content > .headline{animation-delay:.26s}
+.content > .sub{animation-delay:.34s}
+.content > .chips{animation-delay:.42s}
+.content > .reassure{animation-delay:.62s}
+.content > .cta{animation-delay:.7s}
+
+/* notes */
+.notes{max-width:980px;margin:var(--space-7) auto 0;display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}
+.note{background:var(--studio-bg);border:1px solid rgba(127,127,127,.18);border-radius:var(--radius-m);padding:var(--space-5)}
+.note h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-3);opacity:.65}
+.note ul{list-style:none;font-size:13.5px;line-height:1.65}
+.note li{padding-left:16px;position:relative;margin-bottom:6px;opacity:.9}
+.note li:before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.note .ref{margin-top:var(--space-3);font-size:12px;opacity:.6;font-style:italic;padding-left:0}
+.note .ref:before{display:none}
+.note code{font-size:12px;background:rgba(127,127,127,.14);padding:1px 5px;border-radius:5px}
+@media(max-width:760px){.notes{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="studio-head">
+  <div class="brand-block">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18 a7 7 0 0 1 14 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M3 18h18" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div><div class="brand-name">Better</div><div class="brand-sub">05 · Tipo de aposta</div></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="toggle-group" id="stateToggle">
+    <button class="seg on" data-state="empty">Sem seleção</button>
+    <button class="seg" data-state="filled">Com seleção</button>
+  </div>
+  <button class="theme-btn" id="themeBtn" aria-label="Alternar tema">
+    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</div>
+
+<div class="stage">
+  <!-- ANDROID -->
+  <div class="phone-wrap">
+    <div class="os-label">Android · Material 3 Expressive</div>
+    <div class="phone">
+      <div class="status"><span>9:41</span><span class="r"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="3" width="3" height="8" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1" opacity=".3"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="2.5" y="2.5" width="14" height="7" rx="1.2" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen android">
+        <div class="atmos"><div class="haze a"></div><div class="haze b"></div></div>
+        <nav class="topnav">
+          <button class="back-btn" aria-label="Voltar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <div class="dots"><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p current"></span><span class="dot-p"></span><span class="dot-p"></span><span class="dot-p"></span><span class="dot-p"></span></div>
+          <button class="skip">pular</button>
+        </nav>
+        <div class="content">
+          <div class="eyebrow">Pergunta 4 de 8</div>
+          <h1 class="headline">O que você costuma <em>apostar</em>?</h1>
+          <p class="sub">Pode marcar mais de um. Isso fica só com você e ajuda a gente a te apoiar do jeito certo.</p>
+          <div class="chips" data-chips>
+            <button class="chip" data-chip="esportivas">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5 6c4 3 10 3 14 0M5 18c4-3 10-3 14 0"/></svg></span>
+              <span class="chip-lbl">Apostas esportivas<small>Futebol, basquete, MMA, etc.</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+            <button class="chip" data-chip="cassino">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="8" cy="12" r="1.6"/><circle cx="16" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/></svg></span>
+              <span class="chip-lbl">Cassino online<small>Slots, roleta, blackjack, crash</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+            <button class="chip" data-chip="azar">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5 6 .9-4.4 4.2 1 6L12 16.8 6.9 19.6l1-6L3.5 9.4l6-.9z"/></svg></span>
+              <span class="chip-lbl">Jogos de azar<small>Loteria, raspadinha, bingo</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+            <button class="chip" data-chip="poquer">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 6 6 6 10a6 6 0 0 1-12 0c0-4 3-6 6-10z"/><path d="M10 20h4M12 17v3"/></svg></span>
+              <span class="chip-lbl">Pôquer<small>Online ou presencial</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+            <button class="chip" data-chip="outros">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg></span>
+              <span class="chip-lbl">Outros<small>Qualquer outra forma de aposta</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+          </div>
+          <div class="reassure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Suas respostas nunca saem do seu aparelho.</div>
+          <button class="cta" data-cta disabled>continuar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS -->
+  <div class="phone-wrap">
+    <div class="os-label">iOS 26 · Liquid Glass / HIG</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status"><span>9:41</span><span class="r"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="3" width="3" height="8" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="2.5" y="2.5" width="15" height="7" rx="1.2" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen ios">
+        <div class="atmos"><div class="haze a"></div><div class="haze b"></div></div>
+        <nav class="topnav">
+          <button class="back-btn" aria-label="Voltar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <div class="dots"><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p done"></span><span class="dot-p current"></span><span class="dot-p"></span><span class="dot-p"></span><span class="dot-p"></span><span class="dot-p"></span></div>
+          <button class="skip">pular</button>
+        </nav>
+        <div class="content">
+          <div class="eyebrow">Pergunta 4 de 8</div>
+          <h1 class="headline">O que você costuma <em>apostar</em>?</h1>
+          <p class="sub">Pode marcar mais de um. Isso fica só com você e ajuda a gente a te apoiar do jeito certo.</p>
+          <div class="chips" data-chips>
+            <button class="chip" data-chip="esportivas">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5 6c4 3 10 3 14 0M5 18c4-3 10-3 14 0"/></svg></span>
+              <span class="chip-lbl">Apostas esportivas<small>Futebol, basquete, MMA, etc.</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+            <button class="chip" data-chip="cassino">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="8" cy="12" r="1.6"/><circle cx="16" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/></svg></span>
+              <span class="chip-lbl">Cassino online<small>Slots, roleta, blackjack, crash</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+            <button class="chip" data-chip="azar">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5 6 .9-4.4 4.2 1 6L12 16.8 6.9 19.6l1-6L3.5 9.4l6-.9z"/></svg></span>
+              <span class="chip-lbl">Jogos de azar<small>Loteria, raspadinha, bingo</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+            <button class="chip" data-chip="poquer">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 6 6 6 10a6 6 0 0 1-12 0c0-4 3-6 6-10z"/><path d="M10 20h4M12 17v3"/></svg></span>
+              <span class="chip-lbl">Pôquer<small>Online ou presencial</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+            <button class="chip" data-chip="outros">
+              <span class="chip-ico"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg></span>
+              <span class="chip-lbl">Outros<small>Qualquer outra forma de aposta</small></span>
+              <span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+            </button>
+          </div>
+          <div class="reassure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Suas respostas nunca saem do seu aparelho.</div>
+          <button class="cta" data-cta disabled>continuar</button>
+        </div>
+      </div>
+      <div class="glasshint"></div>
+    </div>
+  </div>
+</div>
+
+<div class="notes">
+  <div class="note">
+    <h3>Android · M3E</h3>
+    <ul>
+      <li>Chips multi-select grandes (radius-m 20px) com tonal container <code>brand-soft</code> quando ativos.</li>
+      <li>Checkbox circular custom — preenche com spring overshoot ao marcar.</li>
+      <li>Dot atual vira "pill" (M3 active indicator) — transição morph suave.</li>
+      <li>CTA pill desabilitado em opacity .4; ativa só com 1+ chip; press → arredondado-médio.</li>
+      <li class="ref">Ref.: I Am Sober (onboarding sem pressão), Finch (chips amigáveis).</li>
+    </ul>
+  </div>
+  <div class="note">
+    <h3>iOS · HIG / Liquid Glass</h3>
+    <ul>
+      <li>Chips com radius 14px, sombra suave; sem glass no conteúdo (regra de ouro).</li>
+      <li>Selo "Suas respostas nunca saem do seu aparelho" — privacidade explícita (HIG).</li>
+      <li>Sem FAB; CTA inline no rodapé do scroll.</li>
+      <li>Bezier sem overshoot em hover/seleção; check com fade-in calmo.</li>
+      <li class="ref">Ref.: Calm (conversacional), I Am Sober (tom acolhedor).</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const body=document.body, themeBtn=document.getElementById('themeBtn'), icon=document.getElementById('themeIcon');
+const moon='<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+const sun='<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+themeBtn.onclick=()=>{body.classList.toggle('dark');icon.innerHTML=body.classList.contains('dark')?moon:sun;};
+
+// chip selection (per-phone independent for state toggle simulation)
+function syncCTA(phone){
+  const any=phone.querySelectorAll('.chip.on').length>0;
+  phone.querySelector('[data-cta]').disabled=!any;
+}
+document.querySelectorAll('[data-chips]').forEach(group=>{
+  group.addEventListener('click',e=>{
+    const c=e.target.closest('.chip'); if(!c)return;
+    c.classList.toggle('on');
+    syncCTA(group.closest('.screen'));
+  });
+});
+
+// state toggle: empty vs filled (pre-selects esportivas + cassino on both phones)
+document.getElementById('stateToggle').addEventListener('click',e=>{
+  const b=e.target.closest('.seg'); if(!b)return;
+  document.querySelectorAll('#stateToggle .seg').forEach(s=>s.classList.remove('on'));
+  b.classList.add('on');
+  document.querySelectorAll('.screen').forEach(scr=>{
+    scr.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+    if(b.dataset.state==='filled'){
+      scr.querySelector('[data-chip="esportivas"]').classList.add('on');
+      scr.querySelector('[data-chip="cassino"]').classList.add('on');
+    }
+    syncCTA(scr);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>be better — 18 Fórum</title>
+<style>
+:root{
+  --sf:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',sans-serif;
+  --roboto:'Roboto Flex','Roboto',system-ui,sans-serif;
+  --serif:'Newsreader','Georgia',serif;
+  --brand:#E8663D; --brand-deep:#C7416B; --brand-soft:#FDE3D6;
+  --accent:#F2A65A;
+  --bg:#FFF3EC; --surface:#FFFFFF; --surface-2:#FCE6DA;
+  --ink:#3A2230; --ink-2:#8A6A6E; --hair:#F3D6C8;
+  --shadow-tint:rgba(199,65,107,.4);
+  --studio-bg:#F6E7DD; --studio-ink:#5a3340;
+  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-hig:cubic-bezier(0.32,0.72,0,1);
+  --dur-s:.28s;--dur-m:.5s;--dur-l:.9s;--dur-theme:.7s;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;
+  --radius-l:28px;--radius-m:20px;--radius-s:14px;--radius-pill:999px;
+}
+body.dark{
+  --brand:#E89160; --brand-deep:#C25E3F; --brand-soft:#2A1F1B;
+  --accent:#F2A65A;
+  --bg:#0E1F1B; --surface:#16322B; --surface-2:#1D403A;
+  --ink:#DCE6E2; --ink-2:#7E9389; --hair:#243D36;
+  --shadow-tint:rgba(232,145,96,.4);
+  --studio-bg:#0A1714; --studio-ink:#a8c5bd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sf);background:var(--studio-bg);color:var(--studio-ink);transition:background var(--dur-theme) ease,color var(--dur-theme) ease;min-height:100vh;padding:var(--space-6) var(--space-5) var(--space-7)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.studio-head{max-width:980px;margin:0 auto var(--space-6);display:flex;align-items:center;gap:var(--space-5);flex-wrap:wrap}
+.brand-block{display:flex;align-items:center;gap:var(--space-3)}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(160deg,var(--brand),var(--brand-deep));display:grid;place-items:center;box-shadow:0 6px 16px var(--shadow-tint)}
+.brand-mark svg{width:22px;height:22px}
+.brand-name{font-weight:680;font-size:19px;letter-spacing:-.02em}
+.brand-sub{font-size:12.5px;opacity:.6;margin-top:1px}
+.spacer{flex:1}
+.theme-btn{border:0;cursor:pointer;width:42px;height:42px;border-radius:var(--radius-pill);background:rgba(127,127,127,.14);color:inherit;display:grid;place-items:center;transition:transform var(--dur-s) var(--ease-spring)}
+.theme-btn:active{transform:scale(.9) rotate(-20deg)}
+.theme-btn svg{width:20px;height:20px}
+
+.stage{max-width:980px;margin:0 auto;display:flex;gap:var(--space-7);justify-content:center;flex-wrap:wrap}
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:var(--space-3)}
+.os-label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.5}
+.phone{width:340px;height:720px;border-radius:46px;position:relative;overflow:hidden;background:var(--bg);transition:background var(--dur-theme) ease;box-shadow:0 0 0 11px #1a1a1c,0 0 0 13px #2c2c2e,0 36px 70px -20px rgba(20,20,40,.55)}
+.status{position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:14px;font-weight:600;color:var(--ink);z-index:30}
+.status .r{display:flex;gap:6px;align-items:center}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:108px;height:30px;background:#000;border-radius:18px;z-index:31}
+.screen{position:absolute;inset:0;padding-top:50px;display:flex;flex-direction:column;overflow:hidden}
+
+/* page header */
+.page-head{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:var(--space-3) var(--space-5) var(--space-2)}
+.page-title{font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--brand-soft);border:1.5px solid var(--brand);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--brand);cursor:pointer;transition:box-shadow var(--dur-s)}
+.avatar:hover{box-shadow:0 0 0 3px var(--brand-soft)}
+
+/* filters */
+.filters{position:relative;z-index:5;display:flex;gap:6px;padding:var(--space-2) var(--space-5) var(--space-3);overflow-x:auto;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filter{border:1.5px solid var(--hair);background:transparent;color:var(--ink-2);font:inherit;font-size:12px;font-weight:600;padding:6px 14px;cursor:pointer;white-space:nowrap;transition:all var(--dur-s) var(--ease-spring)}
+.filter.on{border-color:var(--brand);background:var(--brand);color:#fff;box-shadow:0 4px 10px var(--shadow-tint)}
+
+/* feed */
+.content{position:relative;z-index:5;flex:1;overflow-y:auto;scrollbar-width:none;padding:0 var(--space-5) 90px}
+.content::-webkit-scrollbar{display:none}
+
+/* post card */
+.post{background:var(--surface);border:1.5px solid var(--hair);padding:var(--space-4);margin-bottom:var(--space-3)}
+.post-head{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3)}
+.post-avatar{width:34px;height:34px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink-2);flex-shrink:0}
+.post-avatar.a1{background:#E8D5CE;color:#A0604A}
+.post-avatar.a2{background:#D6E2F0;color:#4A6A8E}
+.post-avatar.a3{background:#D9EDDA;color:#4A7A50}
+.post-avatar.a4{background:#EDE2D5;color:#8A6A4A}
+.post-avatar.a5{background:#E5D5E8;color:#7A4A8E}
+.post-info{flex:1;line-height:1.15}
+.post-name{font-size:13.5px;font-weight:680;color:var(--ink)}
+.post-badge{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:10px;font-weight:600;color:var(--brand);background:var(--brand-soft);padding:2px 7px;border-radius:var(--radius-pill);vertical-align:middle}
+.post-badge svg{width:10px;height:10px;stroke:var(--brand);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.post-time{font-size:11px;color:var(--ink-2);font-weight:500;margin-top:2px}
+.post-tag{font-size:10px;font-weight:680;letter-spacing:.08em;text-transform:lowercase;color:var(--brand);background:var(--brand-soft);padding:3px 8px;border-radius:var(--radius-pill);flex-shrink:0;align-self:flex-start}
+
+.post-body{font-size:14.5px;line-height:1.5;color:var(--ink);margin-bottom:var(--space-3)}
+.post-body strong{font-weight:680}
+.post-body em{font-style:italic;color:var(--brand)}
+
+/* reações + comentários */
+.post-actions{display:flex;align-items:center;gap:var(--space-3);border-top:1px solid var(--hair);padding-top:var(--space-3)}
+.react-btn{display:flex;align-items:center;gap:5px;border:1.5px solid var(--hair);background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--ink-2);padding:5px 10px;cursor:pointer;transition:all var(--dur-s) var(--ease-spring)}
+.react-btn:hover{border-color:var(--brand);color:var(--brand)}
+.react-btn.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+.react-btn:active{transform:scale(.95)}
+.react-btn svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.react-btn.on svg{fill:currentColor;fill-opacity:.3}
+.react-count{font-size:12px;font-weight:600;color:var(--ink-2)}
+.comment-btn{display:flex;align-items:center;gap:5px;border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--ink-2);cursor:pointer;margin-left:auto;padding:5px 0}
+.comment-btn svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.comment-btn:hover{color:var(--brand)}
+
+/* FAB: novo post */
+.fab{position:absolute;right:18px;bottom:88px;z-index:20;
+  width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;
+  background:linear-gradient(165deg,var(--brand),var(--brand-deep));
+  color:#fff;display:grid;place-items:center;
+  box-shadow:0 10px 28px -6px var(--shadow-tint),inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform var(--dur-s) var(--ease-spring)}
+.fab:active{transform:scale(.92)}
+.fab svg{width:24px;height:24px;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* bottom nav */
+.botnav{position:absolute;left:0;right:0;bottom:0;z-index:10;display:flex;align-items:center;justify-content:space-around;
+  padding:8px 4px 14px;background:rgba(255,243,236,.92);backdrop-filter:blur(20px);border-top:1px solid var(--hair)}
+body.dark .botnav{background:rgba(14,31,27,.88)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border:0;background:transparent;font:inherit;cursor:pointer;color:var(--ink-2);transition:color var(--dur-s)}
+.tab svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tab-lbl{font-size:10px;font-weight:560;letter-spacing:.02em}
+.tab.on{color:var(--brand)}
+.tab.on .tab-lbl{font-weight:680}
+
+.android{font-family:var(--roboto)}
+.android .post,.android .filter{border-radius:var(--radius-m)}
+.android .react-btn{border-radius:var(--radius-pill)}
+
+.ios{font-family:var(--sf)}
+.ios .post,.ios .filter{border-radius:var(--radius-s)}
+.ios .react-btn{border-radius:var(--radius-s)}
+.ios .glasshint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--ink);opacity:.18}
+
+/* stagger animations */
+.page-head,.filters,.post,.fab{opacity:0;animation:rise var(--dur-l) var(--ease-hig) forwards}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.page-head{animation-delay:.05s}
+.filters{animation-delay:.12s}
+.post:nth-child(1){animation-delay:.2s}
+.post:nth-child(2){animation-delay:.3s}
+.post:nth-child(3){animation-delay:.4s}
+.post:nth-child(4){animation-delay:.5s}
+.fab{animation-delay:.6s}
+
+.notes{max-width:980px;margin:var(--space-7) auto 0;display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}
+.note{background:var(--studio-bg);border:1px solid rgba(127,127,127,.18);border-radius:var(--radius-m);padding:var(--space-5)}
+.note h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-3);opacity:.65}
+.note ul{list-style:none;font-size:13.5px;line-height:1.65}
+.note li{padding-left:16px;position:relative;margin-bottom:6px;opacity:.9}
+.note li:before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.note .ref{margin-top:var(--space-3);font-size:12px;opacity:.6;font-style:italic;padding-left:0}
+.note .ref:before{display:none}
+@media(max-width:760px){.notes{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="studio-head">
+  <div class="brand-block">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18 a7 7 0 0 1 14 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M3 18h18" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div><div class="brand-name">Better</div><div class="brand-sub">19 · Fórum</div></div>
+  </div>
+  <div class="spacer"></div>
+  <button class="theme-btn" id="themeBtn" aria-label="Alternar tema">
+    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</div>
+
+<div class="stage">
+  <!-- ANDROID -->
+  <div class="phone-wrap">
+    <div class="os-label">Android · Material 3 Expressive</div>
+    <div class="phone">
+      <div class="status"><span>9:41</span><span class="r"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="3" width="3" height="8" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1" opacity=".3"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="2.5" y="2.5" width="14" height="7" rx="1.2" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen android">
+        <div class="page-head">
+          <h1 class="page-title">Fórum</h1>
+          <div class="avatar" aria-label="Abrir perfil">L</div>
+        </div>
+
+        <div class="filters">
+          <button class="filter on">todos</button>
+          <button class="filter">meus posts</button>
+          <button class="filter">vitórias</button>
+          <button class="filter">desabafos</button>
+          <button class="filter">dúvidas</button>
+          <button class="filter">dicas</button>
+        </div>
+
+        <div class="content">
+          <!-- post 1: vitória -->
+          <div class="post">
+            <div class="post-head">
+              <div class="post-avatar a3">M</div>
+              <div class="post-info">
+                <div class="post-name">Mari<span class="post-badge"><svg viewBox="0 0 32 32"><path d="M8 22 a8 8 0 0 1 16 0"/><line x1="3" y1="24" x2="29" y2="24"/></svg>Alvorada · 45d</span></div>
+                <div class="post-time">há 2 horas</div>
+              </div>
+              <span class="post-tag">vitória</span>
+            </div>
+            <div class="post-body">Hoje faz <strong>45 dias</strong> sem apostar. Parece pouco, mas quem já perdeu tudo numa noite sabe o que isso significa. Pela primeira vez em anos, <em>eu dormi tranquila</em>.</div>
+            <div class="post-actions">
+              <button class="react-btn on"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>força</button>
+              <span class="react-count">23</span>
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>abraço</button>
+              <span class="react-count">8</span>
+              <button class="comment-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>5</button>
+            </div>
+          </div>
+
+          <!-- post 2: desabafo -->
+          <div class="post">
+            <div class="post-head">
+              <div class="post-avatar a2">R</div>
+              <div class="post-info">
+                <div class="post-name">Rafa<span class="post-badge"><svg viewBox="0 0 32 32"><path d="M24 6 a11 11 0 1 0 0 20 A9 9 0 0 1 24 6z"/></svg>1ª Noite · 3d</span></div>
+                <div class="post-time">há 6 horas</div>
+              </div>
+              <span class="post-tag">desabafo</span>
+            </div>
+            <div class="post-body">Quase recaí ontem. Abri o app de apostas, fiquei olhando 10 minutos e fechei. Tô tremendo até agora. Mas <em>eu fechei</em>.</div>
+            <div class="post-actions">
+              <button class="react-btn on"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>força</button>
+              <span class="react-count">47</span>
+              <button class="react-btn on"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>abraço</button>
+              <span class="react-count">31</span>
+              <button class="comment-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>12</button>
+            </div>
+          </div>
+
+          <!-- post 3: dica -->
+          <div class="post">
+            <div class="post-head">
+              <div class="post-avatar a4">T</div>
+              <div class="post-info">
+                <div class="post-name">Tiago<span class="post-badge"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="16" y1="26" x2="16" y2="30"/><line x1="2" y1="16" x2="6" y2="16"/><line x1="26" y1="16" x2="30" y2="16"/></svg>Meio-dia · 92d</span></div>
+                <div class="post-time">há 1 dia</div>
+              </div>
+              <span class="post-tag">dica</span>
+            </div>
+            <div class="post-body">O que me ajudou: toda vez que a vontade vem, eu abro a calculadora e multiplico o valor que ia apostar × 30 dias. Ver <strong>R$ 15 mil</strong> escrito me tira a vontade na hora.</div>
+            <div class="post-actions">
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>força</button>
+              <span class="react-count">15</span>
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>abraço</button>
+              <span class="react-count">4</span>
+              <button class="comment-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>7</button>
+            </div>
+          </div>
+
+          <!-- post 4: dúvida -->
+          <div class="post">
+            <div class="post-head">
+              <div class="post-avatar a5">C</div>
+              <div class="post-info">
+                <div class="post-name">Carol<span class="post-badge"><svg viewBox="0 0 32 32"><path d="M16 3 c-2 3 -3.5 5 -3.5 7.5 a3.5 3.5 0 0 0 7 0 c0 -2.5 -1.5 -4.5 -3.5 -7.5z"/><rect x="12" y="14" width="8" height="13" rx="1"/></svg>Luz · 1d</span></div>
+                <div class="post-time">há 2 dias</div>
+              </div>
+              <span class="post-tag">dúvida</span>
+            </div>
+            <div class="post-body">É o meu primeiro dia. Alguém tem dica de como passar a primeira noite? A vontade é muito forte quando fica tarde.</div>
+            <div class="post-actions">
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>força</button>
+              <span class="react-count">33</span>
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>abraço</button>
+              <span class="react-count">19</span>
+              <button class="comment-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>21</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAB: novo post -->
+        <button class="fab" aria-label="Novo post">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+
+        <nav class="botnav">
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></svg><span class="tab-lbl">Home</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M17 4H7v5a5 5 0 0 0 10 0V4z"/><path d="M17 4h3v2a3 3 0 0 1-3 3M7 4H4v2a3 3 0 0 0 3 3"/></svg><span class="tab-lbl">Conquistas</span></button>
+          <button class="tab on"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11 7.4L4 21l1.6-6A8 8 0 1 1 21 12z"/><circle cx="9" cy="12" r=".8" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r=".8" fill="currentColor" stroke="none"/></svg><span class="tab-lbl">Fórum</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M3 6.5L12 3l9 3.5L12 10z"/><path d="M3 6.5v6L12 16l9-3.5v-6"/><path d="M7 11v6c0 1.5 2.5 3 5 3s5-1.5 5-3v-6"/></svg><span class="tab-lbl">Learn</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="tab-lbl">Ajustes</span></button>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS -->
+  <div class="phone-wrap">
+    <div class="os-label">iOS 26 · Liquid Glass / HIG</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status"><span>9:41</span><span class="r"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="3" width="3" height="8" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="2.5" y="2.5" width="15" height="7" rx="1.2" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen ios">
+        <div class="page-head">
+          <h1 class="page-title">Fórum</h1>
+          <div class="avatar" aria-label="Abrir perfil">L</div>
+        </div>
+
+        <div class="filters">
+          <button class="filter on">todos</button>
+          <button class="filter">meus posts</button>
+          <button class="filter">vitórias</button>
+          <button class="filter">desabafos</button>
+          <button class="filter">dúvidas</button>
+          <button class="filter">dicas</button>
+        </div>
+
+        <div class="content">
+          <div class="post">
+            <div class="post-head">
+              <div class="post-avatar a3">M</div>
+              <div class="post-info">
+                <div class="post-name">Mari<span class="post-badge"><svg viewBox="0 0 32 32"><path d="M8 22 a8 8 0 0 1 16 0"/><line x1="3" y1="24" x2="29" y2="24"/></svg>Alvorada · 45d</span></div>
+                <div class="post-time">há 2 horas</div>
+              </div>
+              <span class="post-tag">vitória</span>
+            </div>
+            <div class="post-body">Hoje faz <strong>45 dias</strong> sem apostar. Parece pouco, mas quem já perdeu tudo numa noite sabe o que isso significa. Pela primeira vez em anos, <em>eu dormi tranquila</em>.</div>
+            <div class="post-actions">
+              <button class="react-btn on"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>força</button>
+              <span class="react-count">23</span>
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>abraço</button>
+              <span class="react-count">8</span>
+              <button class="comment-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>5</button>
+            </div>
+          </div>
+
+          <div class="post">
+            <div class="post-head">
+              <div class="post-avatar a2">R</div>
+              <div class="post-info">
+                <div class="post-name">Rafa<span class="post-badge"><svg viewBox="0 0 32 32"><path d="M24 6 a11 11 0 1 0 0 20 A9 9 0 0 1 24 6z"/></svg>1ª Noite · 3d</span></div>
+                <div class="post-time">há 6 horas</div>
+              </div>
+              <span class="post-tag">desabafo</span>
+            </div>
+            <div class="post-body">Quase recaí ontem. Abri o app de apostas, fiquei olhando 10 minutos e fechei. Tô tremendo até agora. Mas <em>eu fechei</em>.</div>
+            <div class="post-actions">
+              <button class="react-btn on"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>força</button>
+              <span class="react-count">47</span>
+              <button class="react-btn on"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>abraço</button>
+              <span class="react-count">31</span>
+              <button class="comment-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>12</button>
+            </div>
+          </div>
+
+          <div class="post">
+            <div class="post-head">
+              <div class="post-avatar a4">T</div>
+              <div class="post-info">
+                <div class="post-name">Tiago<span class="post-badge"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="16" y1="26" x2="16" y2="30"/><line x1="2" y1="16" x2="6" y2="16"/><line x1="26" y1="16" x2="30" y2="16"/></svg>Meio-dia · 92d</span></div>
+                <div class="post-time">há 1 dia</div>
+              </div>
+              <span class="post-tag">dica</span>
+            </div>
+            <div class="post-body">O que me ajudou: toda vez que a vontade vem, eu abro a calculadora e multiplico o valor que ia apostar × 30 dias. Ver <strong>R$ 15 mil</strong> escrito me tira a vontade na hora.</div>
+            <div class="post-actions">
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>força</button>
+              <span class="react-count">15</span>
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>abraço</button>
+              <span class="react-count">4</span>
+              <button class="comment-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>7</button>
+            </div>
+          </div>
+
+          <div class="post">
+            <div class="post-head">
+              <div class="post-avatar a5">C</div>
+              <div class="post-info">
+                <div class="post-name">Carol<span class="post-badge"><svg viewBox="0 0 32 32"><path d="M16 3 c-2 3 -3.5 5 -3.5 7.5 a3.5 3.5 0 0 0 7 0 c0 -2.5 -1.5 -4.5 -3.5 -7.5z"/><rect x="12" y="14" width="8" height="13" rx="1"/></svg>Luz · 1d</span></div>
+                <div class="post-time">há 2 dias</div>
+              </div>
+              <span class="post-tag">dúvida</span>
+            </div>
+            <div class="post-body">É o meu primeiro dia. Alguém tem dica de como passar a primeira noite? A vontade é muito forte quando fica tarde.</div>
+            <div class="post-actions">
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>força</button>
+              <span class="react-count">33</span>
+              <button class="react-btn"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>abraço</button>
+              <span class="react-count">19</span>
+              <button class="comment-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>21</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="fab" aria-label="Novo post">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+
+        <nav class="botnav">
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></svg><span class="tab-lbl">Home</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M17 4H7v5a5 5 0 0 0 10 0V4z"/><path d="M17 4h3v2a3 3 0 0 1-3 3M7 4H4v2a3 3 0 0 0 3 3"/></svg><span class="tab-lbl">Conquistas</span></button>
+          <button class="tab on"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11 7.4L4 21l1.6-6A8 8 0 1 1 21 12z"/><circle cx="9" cy="12" r=".8" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r=".8" fill="currentColor" stroke="none"/></svg><span class="tab-lbl">Fórum</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><path d="M3 6.5L12 3l9 3.5L12 10z"/><path d="M3 6.5v6L12 16l9-3.5v-6"/><path d="M7 11v6c0 1.5 2.5 3 5 3s5-1.5 5-3v-6"/></svg><span class="tab-lbl">Learn</span></button>
+          <button class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="tab-lbl">Ajustes</span></button>
+        </nav>
+      </div>
+      <div class="glasshint"></div>
+    </div>
+  </div>
+</div>
+
+<div class="notes">
+  <div class="note">
+    <h3>Estrutura do Fórum</h3>
+    <ul>
+      <li><strong>Feed único</strong> com todos os posts, filtros por tag (todos, vitórias, desabafos, dúvidas, dicas).</li>
+      <li>Cada post tem: avatar com inicial, <strong>apelido + insígnia de nível</strong> (ícone do nível + nome + dias limpos).</li>
+      <li>Tag colorida no canto do post: vitória, desabafo, dúvida, dica — categorização leve.</li>
+      <li>Reações: <strong>"força"</strong> (coração) e <strong>"abraço"</strong> (pessoas) — vocabulário de apoio, não de "curtida".</li>
+      <li class="ref">Anonimato parcial: só apelido inventado + insígnia — sem dados reais.</li>
+    </ul>
+  </div>
+  <div class="note">
+    <h3>Posts de exemplo (copy cuidado)</h3>
+    <ul>
+      <li><strong>Mari</strong> (Alvorada · 45d): vitória — "Pela primeira vez em anos, eu dormi tranquila." — celebração real, íntima.</li>
+      <li><strong>Rafa</strong> (1ª Noite · 3d): desabafo — "Quase recaí... Mas eu fechei." — vulnerabilidade com triunfo. Post mais engajado (47 força, 31 abraço).</li>
+      <li><strong>Tiago</strong> (Meio-dia · 92d): dica — "multiplico o valor × 30" — a Virada feita de forma espontânea no fórum.</li>
+      <li><strong>Carol</strong> (Luz · 1d): dúvida — primeiro dia, pedindo ajuda — 21 comentários, comunidade ativa.</li>
+      <li class="ref">Tom: sem julgamento, sem gíria de casino, sem comparação de desempenho.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const body=document.body, themeBtn=document.getElementById('themeBtn'), icon=document.getElementById('themeIcon');
+const moon='<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+const sun='<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+themeBtn.onclick=()=>{body.classList.toggle('dark');icon.innerHTML=body.classList.contains('dark')?moon:sun;};
+
+// filtros
+document.querySelectorAll('[data-phone],.screen').forEach(screen=>{
+  const filters = screen.querySelectorAll('.filter');
+  filters.forEach(f=>f.addEventListener('click',()=>{
+    filters.forEach(b=>b.classList.remove('on'));
+    f.classList.add('on');
+  }));
+});
+
+// reações toggle
+document.querySelectorAll('.react-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const countEl = btn.nextElementSibling;
+    const wasOn = btn.classList.toggle('on');
+    if(countEl && countEl.classList.contains('react-count')){
+      let n = parseInt(countEl.textContent);
+      countEl.textContent = wasOn ? n+1 : n-1;
+    }
+  });
+});
+</script>
+</body>
+</html>
